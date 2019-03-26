@@ -20,7 +20,7 @@ public partial class ToDo
 
     public string name { get; set; }
 
-    public int complete { get; set; }
+    public bool complete { get; set; }
 
 }
 

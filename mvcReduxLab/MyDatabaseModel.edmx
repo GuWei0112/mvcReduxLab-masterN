@@ -29,7 +29,7 @@
             <PropertyRef Name="name" />
           </Key>
           <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="complete" Type="int" Nullable="false" />
+          <Property Name="complete" Type="bit" Nullable="false" />
         </EntityType>
         <EntityContainer Name="MyDatabaseModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
@@ -69,7 +69,7 @@
             <PropertyRef Name="name" />
           </Key>
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="complete" Type="Int32" Nullable="false" />
+          <Property Name="complete" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>

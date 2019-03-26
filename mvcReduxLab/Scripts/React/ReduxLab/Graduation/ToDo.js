@@ -2,6 +2,7 @@
 import { connect } from 'react-redux'
 import { Container, Row, Col, ToggleButtonGroup } from 'reactstrap'
 import { Ks } from 'CommonFF/actions.js'
+import apiClient from './apiClient.js'
 class ToDo extends Component {
     constructor(props) {
         super(props)
@@ -24,16 +25,23 @@ class ToDo extends Component {
         this.handleCompleteList = this.handleCompleteList.bind(this)
         this.handleDeleteDo = this.handleDeleteDo.bind(this)
         this.handleOppsiteList = this.handleOppsiteList.bind(this)
+        this.updateDCount = this.updateDCount.bind(this)
+        this.updateLCount = this.updateLCount.bind(this)
+       // this.updateToDoFormData = this.updateToDoFormData.bind(this)
+        this.saveToDoFormData = this.saveToDoFormData.bind(this)
+        this.deleteToDoFormData = this.deleteToDoFormData.bind(this)
 
     }
     componentDidMount() {
-        this.setState({ count: Object.keys(this.props.todoInfo).length})
+        this.setState({ count: Object.keys(this.props.todoInfo).length })
+        
     }
     render() {
         const { showList, showOppList, showActive, showAll, showComplete } = this.state
         const { todoInfo, handleValueChange } = this.props
+      
 
-        let allList = todoInfo.map((item, index) => 
+        let allList = todoInfo.map((item, index) =>
             (<li className="list-group-item" key={index} >
                 <div className="input-group">
                     <div className="input-group-prepend">
@@ -42,12 +50,17 @@ class ToDo extends Component {
                                 onChange={(e) =>
                                     this.handleChangeState(item, index)} checked={Boolean(item.complete)} />
                             <label htmlFor={item.name}>{item.name}</label>
+                            <span className="badge badge-primary badge-pill">{item.likeCount}</span>
+                            <span className="badge badge-danger badge-pill">{item.dislikeCount}</span>
                         </div>
                         <div className="btn-group float-right">
+                            <button className="btn btn-primary" onClick={(e) => this.updateLCount(item, index)}>讚</button>
+                            <button className="btn btn-danger" onClick={(e) => this.updateDCount(item, index)}>爛</button>
                             <button className="btn btn-danger" onClick={(e) =>
                                 this.removeItem(item, index)}>X</button>
-                            </div>
-                        
+                            <button className="btn btn-primary" onClick={this.saveToDoFormData}>Save</button>
+                        </div>
+
                     </div>
 
                 </div>
@@ -61,12 +74,16 @@ class ToDo extends Component {
                 <div className="input-group">
                     <div className="input-group-prepend">
                         <div className="input-group-text">
-                            <input type="checkbox" className="click-checkbox" id="ChangeState"
+                            <input type="checkbox" className="click-checkbox" id={item.name}
                                 onChange={(e) =>
                                     this.handleChangeState(item, index)} checked={Boolean(item.complete)} />
-                            <label htmlFor="ChangeState">{item.name}</label>
+                            <label htmlFor={item.name}>{item.name}</label>
+                            <span className="badge badge-primary badge-pill">{item.likeCount}</span>
+                            <span className="badge badge-danger badge-pill">{item.dislikeCount}</span>
                         </div>
                         <div className="btn-group float-right">
+                            <button className="btn btn-primary" onClick={(e) => this.updateLCount(item, index)}>讚</button>
+                            <button className="btn btn-danger" onClick={(e) => this.updateDCount(item, index)}>爛</button>
                             <button className="btn btn-danger" onClick={(e) =>
                                 this.removeItem(item, index)}>X</button>
                         </div>
@@ -84,14 +101,19 @@ class ToDo extends Component {
                 <div className="input-group">
                     <div className="input-group-prepend">
                         <div className="input-group-text">
-                            <input type="checkbox" className="click-checkbox" id="ChangeState"
+                            <input type="checkbox" className="click-checkbox" id={item.name}
                                 onChange={(e) =>
                                     this.handleChangeState(item, index)} checked={Boolean(item.complete)} />
-                            <label htmlFor="ChangeState">{item.name}</label>
+                            <label htmlFor={item.name}>{item.name}</label>
+                            <span className="badge badge-primary badge-pill">{item.likeCount}</span>
+                            <span className="badge badge-danger badge-pill">{item.dislikeCount}</span>
                         </div>
                         <div className="btn-group float-right">
+                            <button className="btn btn-primary" onClick={(e) => this.updateLCount(item, index)}>讚</button>
+                            <button className="btn btn-danger" onClick={(e) => this.updateDCount(item, index)}>爛</button>
                             <button className="btn btn-danger" onClick={(e) =>
                                 this.removeItem(item, index)}>X</button>
+                            
                         </div>
 
                     </div>
@@ -167,6 +189,67 @@ class ToDo extends Component {
         )
 
     }
+    updateLCount(item, index) {
+        item.likeCount = item.likeCount + 1 // 設定新值
+        this.props.dispUpdateLCount(index, item)
+    }
+    updateDCount(item, index) {
+        item.dislikeCount = item.dislikeCount + 1 // 設定新值
+        this.props.dispUpdateDCount(index, item)
+    }
+    saveToDoFormData() {
+        const { formData } = this.props
+        console.log('SaveToDoFormData', { formData })
+
+        this.props.setBlocking(true)
+        apiClient.SaveToDoFormData(formData).then((resp) => {
+            console.log('SaveToDoFormData success', { resp })
+            swal.fire('SaveToDoFormData success', 'success')
+        }).catch((xhr) => {
+            console.log('SaveToDoFormData fail!', { xhr })
+            const err = xhr.response.data;
+            swal.fire('SaveToDoFormData fail!', err.errMsg, 'error')
+        }).finally(() => {
+            this.props.setBlocking(false)
+        })
+    }
+    updateToDoFormData() {
+        
+        const name = this.props.formData.todoInfo.name
+        console.log('updateToDoFormData', { name })
+
+        this.props.setBlocking(true)
+        const args = { name }
+        apiClient.UpdateToDoFormData(args).then((resp) => {
+            const formData = resp.data
+            console.log('updateToDoFormData success', { formData })
+            this.props.fillFormData(formData)
+            swal.fire('updateToDoFormData success', 'success')
+        }).catch((xhr) => {
+            console.log('updateToDoFormData fail!', { xhr })
+            const err = xhr.response.data;
+            swal.fire('updateToDoFormData fail!', err.errMsg, 'error')
+        }).finally(() => {
+            this.props.setBlocking(false)
+        })
+    }
+    deleteToDoFormData() {
+        const { formData } = this.props
+        console.log('deleteToDoFormData', { formData })
+
+        this.props.setBlocking(true)
+        apiClient.DeleteToDoFormData(formData).then((resp) => {
+            console.log('deleteToDoFormData success', { resp })
+            swal.fire('deleteToDoFormData success', 'success')
+        }).catch((xhr) => {
+            console.log('deleteToDoFormData fail!', { xhr })
+            const err = xhr.response.data;
+            swal.fire('deleteToDoFormData fail!', err.errMsg, 'error')
+        }).finally(() => {
+            this.props.setBlocking(false)
+        })
+    
+    }
     handleOppsiteList(e) {
         const target = e.target
         const value = target.value ? target.checked : target.value
@@ -193,21 +276,18 @@ class ToDo extends Component {
         this.setState({ showAll: true })
         this.setState({ showActive: false })
         this.setState({ showComplete: false })
-       // this.setState({ showOppList: false })
     }
     handleActiveList(e) {
         e.preventDefault();
         this.setState({ showAll: false })
         this.setState({ showActive: true })
         this.setState({ showComplete: false })
-        //this.setState({ showOppList: false })
     }
     handleCompleteList(e) {
         e.preventDefault();
         this.setState({ showAll: false })
         this.setState({ showActive: false })
         this.setState({ showComplete: true })
-        //this.setState({ showOppList: false })
     }
     handleDeleteDo(e) {
         const complete = this.props.todoInfo.filter(function (complete) {
@@ -221,6 +301,12 @@ class ToDo extends Component {
         if (Object.keys(all).length - 1 === 0) {
             this.setState({ showList: false })
         } 
+
+        if (Object.keys(complete).length-1 === 0) {
+            this.setState({ DelDo: false })
+        } else {
+            this.setState({ DelDo: true })
+        }
     }
     removeItem(item, index) {      
         this.props.dispRemoveItem(index)     
@@ -245,7 +331,8 @@ class ToDo extends Component {
         })
         if (Object.keys(all).length-1 === 0) {
             this.setState({ showList: false })
-        } 
+        }
+        this.deleteToDoFormData()
     }
     addItem(newItem) {
         this.props.dispInsertItem(newItem)
@@ -253,22 +340,35 @@ class ToDo extends Component {
             return complete.complete === false
         })
         this.setState({ count: Object.keys(active).length + 1 })
-        this.setState({ showList : true })
+        this.setState({ showList: true })
+        
     }
     handleKeyUp(e) {
 
         if (e.keyCode === 13) {            
             const target = e.target
+            const value = target.value
             const newItem = {
-                name: target.value,
-                complete: Boolean(false)
+                name: value,
+                complete: Boolean(false),
+                likeCount: 0,
+                dislikeCount:0
             }
             this.addItem(newItem,e)
-  
+            
             target.value = ''
+            
+            const all = this.props.todoInfo.filter(function (complete) {
+                return complete.complete === true || complete.complete === false
 
+            })
+            if (Object.keys(all).length-1  === 0) {
+                console.log(Object.keys(all).length)
+            //    this.saveToDoFormData()
+            } 
         }
-
+        
+        
     }
 
     handleChangeState(item, index) {
@@ -295,7 +395,12 @@ class ToDo extends Component {
 
 // connect to Store
 const mapStateToProps = (state, ownProps) => ({
-    todoInfo: state.todoInfo
+    
+    todoInfo: state.todoInfo,
+    formData: {
+        todoInfo: state.todoInfo
+    }
+    
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -331,6 +436,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 value,
                 targetReducer
             })
+        },
+        dispUpdateLCount: (index, payload) => {
+            dispatch({ type: Ks.UPDATE_LCOUNT, index, payload, targetReducer })
+        },
+        dispUpdateDCount: (index, payload) => {
+            dispatch({ type: Ks.UPDATE_DCOUNT, index, payload, targetReducer })
+        },
+        setBlocking: (flag) => {
+            dispatch({ type: Ks.SET_BLOCKING, flag })
+        },
+        fillFormData: (formData) => {
+            dispatch({ type: Ks.FILL_FORM_DATA, formData })
         }
     }
 }

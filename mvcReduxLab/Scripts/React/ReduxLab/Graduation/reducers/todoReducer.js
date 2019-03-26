@@ -53,6 +53,21 @@ export default function todoReducer(state = initialState, action) {
                     return item
                 })
             }
+        case Ks.UPDATE_LCOUNT:
+            {
+                const itemList = state.slice()
+                itemList[action.index] = action.payload
+                return itemList
+            }
+        case Ks.UPDATE_DCOUNT:
+            {
+                const itemList = state.slice()
+                itemList[action.index] = action.payload
+                return itemList
+            }
+        case Ks.FILL_FORM_DATA:
+            /// action = { type, formData }
+            return { ...state, ...(action.formData.todoInfo) }
         default:
             return state;
     }

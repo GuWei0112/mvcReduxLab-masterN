@@ -46,7 +46,9 @@ export const Ks = {
     CLEAR_ERROR_MESSAGE: 'CLEAR_ERROR_MESSAGE',
     CHANGE_STATE: 'CHANGE_STATE', //變更checkbox狀態
     DELETE_DO: 'DELETE_DO',
-    OPPSITE_LIST: 'OPPSITE_LIST'
+    OPPSITE_LIST: 'OPPSITE_LIST',
+    UPDATE_LCOUNT:'UPDATE_LCOUNT',
+    UPDATE_DCOUNT:'UPDATE_DCOUNT'
 }
 
 ////== constants - Enum ============================================
@@ -233,6 +235,22 @@ export default {
     deleteDo: (itemValues, detailList, targetReducer) => {  //刪除complete狀態
         return {
             type: Ks.DELETE_DO,
+            itemValues: itemValues,
+            detailList: detailList,
+            targetReducer: targetReducer
+        }
+    },
+    updateLCount: (itemValues, detailList, targetReducer) => {
+        return {
+            type: Ks.UPDATE_LCOUNT,
+            itemValues: itemValues,
+            detailList: detailList,
+            targetReducer: targetReducer
+        }
+    },
+    updateDCount: (itemValues, detailList, targetReducer) => {
+        return {
+            type: Ks.UPDATE_DCOUNT,
             itemValues: itemValues,
             detailList: detailList,
             targetReducer: targetReducer

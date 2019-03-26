@@ -96,7 +96,8 @@ class AppForm extends React.Component {
 const mapStateToProps = (state, ownProps) => ({
     appInfo: state.appInfo,
     formData: {
-        likeInfo: state.likeInfo
+        likeInfo: state.likeInfo,
+        todoInfo: state.todoInfo
     }
 })
 

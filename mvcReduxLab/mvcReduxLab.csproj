@@ -250,6 +250,7 @@
       <DependentUpon>MyDatabaseModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AccountInfoFormDataVM.cs" />
+    <Compile Include="ViewModels\ToDoInfoFormDataVM.cs" />
     <Compile Include="ViewModels\ErrorMessageVM.cs" />
     <Compile Include="ViewModels\LikeInfoFormDataVM.cs" />
   </ItemGroup>
