@@ -25,6 +25,7 @@ export const Ks = {
     CHECK_ALL_ITEM: 'CHECK_ALL_ITEM',
     REMOVE_CHECKED_ITEM: 'REMOVE_CHECKED_ITEM',
     INSERT_ITEM: 'INSERT_ITEM', 
+    INSERT_AITEM: 'INSERT_AITEM',
     UPDATE_ITEM: 'UPDATE_ITEM', // 更新 Item 
     REMOVE_ITEM: 'REMOVE_ITEM', 
     SWITCH_ITEM_MODE: 'SWITCH_ITEM_MODE',
@@ -47,8 +48,9 @@ export const Ks = {
     CHANGE_STATE: 'CHANGE_STATE', //變更checkbox狀態
     DELETE_DO: 'DELETE_DO',
     OPPSITE_LIST: 'OPPSITE_LIST',
-    UPDATE_LCOUNT:'UPDATE_LCOUNT',
-    UPDATE_DCOUNT:'UPDATE_DCOUNT'
+    UPDATE_KCOUNT:'UPDATE_KCOUNT',
+    UPDATE_DCOUNT: 'UPDATE_DCOUNT'
+
 }
 
 ////== constants - Enum ============================================
@@ -217,6 +219,15 @@ export default {
             targetReducer: targetReducer
         }
     },
+    insertAItem: (itemValues, detailList, formdata,targetReducer) => {
+        return {
+            type: Ks.INSERT_AITEM,
+            itemValues: itemValues,
+            detailList: detailList,
+            formdata:formdata,
+            targetReducer: targetReducer
+        }
+    },
     changeState: (itemValues, detailList, targetReducer) => {  //更改單個complete狀態
         return {
             type: Ks.CHANGE_STATE,
@@ -240,9 +251,9 @@ export default {
             targetReducer: targetReducer
         }
     },
-    updateLCount: (itemValues, detailList, targetReducer) => {
+    updateKCount: (itemValues, detailList, targetReducer) => {
         return {
-            type: Ks.UPDATE_LCOUNT,
+            type: Ks.UPDATE_KCOUNT,
             itemValues: itemValues,
             detailList: detailList,
             targetReducer: targetReducer

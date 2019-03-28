@@ -9,17 +9,26 @@ export default {
         const url = '/ReduxLab/Graduation/LoadFormData'
         return axios.post(url, args)
     },
-    SaveToDoFormData: (formData) => {
+    SaveToDoFormData: (args) => {
         const url = '/ReduxLab/Graduation/SaveToDoFormData'
-        console.log('SaveToDoFormData',formData)
-        return axios.post(url, { formData })
+        return axios.post(url, args )
     },
-    UpdateToDoFormData: (args) => {
-        const url = '/ReduxLab/Graduation/UpdateToDoFormData'
-        return axios.post(url, args)
+    LoadToDoFormData: () => {
+        const url = '/ReduxLab/Graduation/LoadToDoFormData'
+        return axios.post(url)
     },
     DeleteToDoFormData: (args) => {
         const url = '/ReduxLab/Graduation/DeleteToDoFormData'
+        console.log(args)
         return axios.post(url, args)
-    }
+    },
+    UpdateToDoFormData: (formData) => {
+        const url = '/ReduxLab/Graduation/UpdateToDoFormData'
+        console.log('SaveToDoFormData', formData)
+        return axios.post(url, formData)
+    },
+    DeleteToDoCompleteData: (formData) => {
+        const url = '/ReduxLab/Graduation/DeleteToDoCompleteData'
+        return axios.post(url, formData)
+    },
 }

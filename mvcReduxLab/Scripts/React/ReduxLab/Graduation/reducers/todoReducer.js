@@ -16,12 +16,23 @@ export default function todoReducer(state = initialState, action) {
         case Ks.ASSIGN_VALUE:
             return { ...state, [action.name]: action.value }
         case Ks.ASSIGN_STATE_PROPS:
-            return { ...state, ...(action.properties) }
+            state = action.properties
+            return state
         case Ks.INSERT_ITEM:
             {
                 const itemList = state.slice()
                 itemList.push(action.payload)
-                return itemList
+                state = itemList
+                return state
+            }
+        case Ks.INSERT_AITEM:
+            {
+                const itemList = state.slice()
+                itemList.push(action.payload)
+                action.formData = itemList
+                console.log('i am here',action.formData)
+              //  state = itemList
+                return action.formData
             }
         case Ks.REMOVE_ITEM:
             {
@@ -53,8 +64,8 @@ export default function todoReducer(state = initialState, action) {
                     return item
                 })
             }
-        case Ks.UPDATE_LCOUNT:
-            {
+        case Ks.UPDATE_KCOUNT:
+            {               
                 const itemList = state.slice()
                 itemList[action.index] = action.payload
                 return itemList
@@ -66,7 +77,7 @@ export default function todoReducer(state = initialState, action) {
                 return itemList
             }
         case Ks.FILL_FORM_DATA:
-            /// action = { type, formData }
+            /// action = { type, formData }            
             return { ...state, ...(action.formData.todoInfo) }
         default:
             return state;

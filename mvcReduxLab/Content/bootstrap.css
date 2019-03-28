@@ -3703,7 +3703,22 @@ input[type="button"].btn-block {
     text-decoration: line-through;
     opacity:0.4;
 }
+.fadeTodo {
+    opacity: 1;
+    animation: fade 2s linear;
+}
+.sT {
+    color:rgba(175,47,47,0.15);
+}
+@keyframes fade {
+    0% {
+        opacity: 0
+    }
 
+    100% {
+        opacity: 1
+    }
+}
 .custom-radio .custom-control-label::before {
   border-radius: 50%;
 }
